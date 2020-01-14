@@ -588,6 +588,11 @@ def _create_function(fcode, fglobals, fname=None, fdefaults=None,
     func.__dict__.update(fdict) #XXX: better copy? option to copy?
     if fkwdefaults is not None:
         func.__kwdefaults__ = fkwdefaults
+    
+    # PATCH: add builtins back to fglobals if they are missing
+    if '__builtins__' not in func.__globals__:
+        func.__globals__['__builtins__'] = importlib.import_module('builtins')
+
     return func
 
 def _create_ftype(ftypeobj, func, args, kwds):
